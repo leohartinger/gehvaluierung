@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2487.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Initialisieren der Karte</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const map = L.map('map').setView([47.5162, 14.5501], 7); // Österreich Zentrum</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>attribution: '© OpenStreetMap contributors'</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}).addTo(map);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const markers = []; // Speicher für Marker-Daten</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Funktion zum Hinzufügen eines Markers</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const addMarker = (latlng, location, issue, suggestion) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const marker = L.marker(latlng).addTo(map);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const popupContent = `&lt;strong&gt;Standort:&lt;/strong&gt; ${location}&lt;br&gt;&lt;strong&gt;Problem:&lt;/strong&gt; ${issue}&lt;br&gt;&lt;strong&gt;Vorschlag:&lt;/strong&gt; ${suggestion || 'Keine Angabe'}`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>marker.bindPopup(popupContent);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>markers.push({ latlng, location, issue, suggestion });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Klick auf die Karte -&gt; Koordinaten speichern</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let currentLatLng = null;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>map.on('click', function (e) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>currentLatLng = e.latlng; // Koordinaten des Klicks</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Formular verarbeiten</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('locationForm').addEventListener('submit', function (e) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>e.preventDefault();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (!currentLatLng) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>alert('Bitte klicken Sie auf die Karte, um den Standort festzulegen.');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const location = document.getElementById('location').value;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const issue = document.getElementById('issue').value;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const suggestion = document.getElementById('suggestion').value;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>addMarker(currentLatLng, location, issue, suggestion);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Formular zurücksetzen</p>
+<p class="p1"><span class="Apple-converted-space">        </span>this.reset();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>currentLatLng = null; // Koordinaten zurücksetzen</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1">&lt;/script&gt;</p>
+</body>
+</html>
